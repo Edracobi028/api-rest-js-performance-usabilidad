@@ -111,6 +111,26 @@ button {
   cursor: pointer;
 }
 
+.movie-container--loading { /* loading skeleton aplicado a la clase */
+  background: var(--purple-light-2);
+  border-radius: 8px;
+  height: 225px;
+  min-height: 225px;
+  max-height: 225px;
+  width: 150px;
+  min-width: 150px;
+  max-width: 150px;
+  margin-bottom: 15px;
+  animation: loading-skeleton infinite 1.5s;
+}
+
+.movie-container--loading:nth-child(2) { /* Para los hijos que sean el 2do */
+  animation-delay: .2s; /*Retardar la animacion para crear efecto ola */
+}
+.movie-container--loading:nth-child(3) { /* Para los hijos que sean el 3ro */
+  animation-delay: .4s; /*Retardar la animacion para crear efecto ola */
+}
+
 .movie-img {
   border-radius: 8px;
 }
@@ -220,6 +240,24 @@ button {
 /* Categories */
 .category-container {
   width: 45%;
+}
+
+.category-container--loading {
+  background: var(--purple-light-2);
+  border-radius: 8px;
+  height: 25px;
+  min-height: 25px;
+  max-height: 25px;
+  width: 150px;
+  min-width: 150px;
+  max-width: 150px;
+  margin-bottom: 15px;
+  animation: loading-skeleton infinite 1.5s;
+
+}
+
+.category-container--loading:nth-child(2) { /* Para los hijos que sean el 2do */
+  animation-delay: .2s; /*Retardar la animacion para crear efecto ola */
 }
 
 .category-title {
@@ -362,4 +400,14 @@ footer {
 /* Navigation */
 .inactive {
   display: none;
+}
+
+/* Animations */
+@keyframes loading-skeleton{
+  0%, 100% { /* En cero porciento tenga toda la opacidad y en 100  */
+    opacity: 100%;
+  }
+  50% { /* Cuando llegue a 50 sin opacidad */
+    opacity: 0%;
+  }
 }

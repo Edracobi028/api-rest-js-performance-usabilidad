@@ -15,7 +15,7 @@ const api = axios.create({
 
 function createMovies(movies, container){ //peliculas y el apendchild que muestre peliculas
     
-    container.innerHTML = ''; //vaciar para evitar duplicar
+    container.innerHTML = ''; //Limipiamos el contenedor y evitar duplicar
     
     //Iterar para cargar con cada pelicula las tarjetas del index
     movies.forEach(movie  => {
