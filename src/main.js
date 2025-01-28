@@ -11,10 +11,23 @@ const api = axios.create({
     },
 });
 
-// Utils
+// === Utils ===
 
-function createMovies(movies, container){ //peliculas y el apendchild que muestre peliculas
-    
+// OBSERVADOR
+//crear variable con instancia con argumento arrow function (AF)
+//El AF recibe un param,  elementos observados (entries)
+const lazyLoader = new IntersectionObserver((entries) => {
+    entries.forEach( (entry)=> { //recorrer cada elemento observado 
+        //Si esta itersectada mostrarla
+        if(entry.isIntersecting){
+            console.log({entry});
+            const url = entry.target.getAttribute('data-img'); //obtener en una variable la url
+            entry.target.setAttribute('src',url); //agregarlo a atributo src
+        }
+    });
+});
+
+function createMovies(movies, container, lazyLoad = false ){ //peliculas y el apendchild que muestre peliculas y si requiere lazyloader
     container.innerHTML = ''; //Limipiamos el contenedor y evitar duplicar
     
     //Iterar para cargar con cada pelicula las tarjetas del index
@@ -30,14 +43,25 @@ function createMovies(movies, container){ //peliculas y el apendchild que muestr
         movieImg.classList.add('movie-img');  // agregar la clase del css 
         movieImg.setAttribute('alt',movie.title); //agregar atributo (tipo + valor) alt
         movieImg.setAttribute(
-            'src',
+            lazyLoad ? 'data-img' :'src',
             'https://image.tmdb.org/t/p/w300' + movie.poster_path,); //agregar atributo (tipo + valor) alt
         
+        
+
+        
+        if(lazyLoad){ //si es true usar lazyloader
+            //llamar a lazyloader usando la funcion "observe"  cada que llama estamos llamndo
+        lazyLoader.observe(movieImg); //pasamos por param el elemento html de imagenes
+        //agregar cada imagen a el array entries
+        }
+            
         //conectar los elementos creados al elemento del index
         movieContainer.appendChild(movieImg); // meter la img al div
         container.appendChild(movieContainer); // meter el container a la seccion
 
     });
+
+    
 }
 
 function createCategories(categories, container){
@@ -77,7 +101,7 @@ async function getTrendingMoviesPreview() {
     const movies = data.results;
     console.log(movies);
     
-    createMovies(movies,trendingMoviesPreviewList); //enviar array peliculas y el nombre del contenedor
+    createMovies(movies,trendingMoviesPreviewList, true); //enviar array peliculas y el nombre del contenedor y lazy Load en true 
 }
 
 async function getCategoriesPreview() {
