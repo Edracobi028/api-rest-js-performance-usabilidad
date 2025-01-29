@@ -50,8 +50,16 @@ function createMovies(movies, container, lazyLoad = false ){ //peliculas y el ap
         movieImg.addEventListener('error', ()=>{
             movieImg.setAttribute(
                 'src',
-                'https://cdn.shopify.com/s/files/1/0529/9840/6307/t/10/assets/a-film-reel-lays-tangled-against-a-white-background-1656781059017.jpg?v=1656781060',
-            );
+                //'https://cdn.shopify.com/s/files/1/0529/9840/6307/t/10/assets/a-film-reel-lays-tangled-against-a-white-background-1656781059017.jpg?v=1656781060',
+                `src/img/unfound_category_movies/bg-default-${movie.genre_ids[0]}.png`
+                
+                
+            )
+             const movieTitleText  = document.createTextNode(movieImg.getAttribute('alt'));
+            const movieTitle = document.createElement('span');
+            movieTitle.setAttribute('id', 'span-unfound-movie');
+            movieContainer.appendChild(movieTitle);
+            movieTitle.appendChild(movieTitleText); 
         }); //agregarle el atributo src a la imagen //agregarle una imagen por defecto
 
         //escuche el evento error

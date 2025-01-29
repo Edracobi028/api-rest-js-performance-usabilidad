@@ -280,23 +280,23 @@ button {
   height: 8px;
 }
 #id28 { --idColor: var(--yellow); }
+#id10751 { --idColor: var(--yellow); }
+#id878 { --idColor: var(--yellow); }
 #id12 { --idColor: var(--green); }
 #id16 { --idColor: var(--green); }
-#id35 { --idColor: var(--lightBlue); }
-#id80 { --idColor: var(--red); }
-#id99 { --idColor: var(--purple-dark-1); }
-#id18 { --idColor: var(--purple-medium-1); }
-#id10751 { --idColor: var(--yellow); }
-#id14 { --idColor: var(--lightBlue); } /* Fantasy */
 #id36 { --idColor: var(--green); }
-#id27 { --idColor: var(--red); } /* Horror */
-#id10402 { --idColor: var(--darkBlue); }
-#id9648 { --idColor: var(--purple-dark-1); }
-#id10749 { --idColor: var(--purple-medium-1); }
-#id878 { --idColor: var(--yellow); }
-#id10770 { --idColor: var(--darkBlue); }
-#id53 { --idColor: var(--red); } /* Triller */
+#id35 { --idColor: var(--lightBlue); }
+#id14 { --idColor: var(--lightBlue); } /* Fantasy */
 #id10752 { --idColor: var(--lightBlue); }
+#id80 { --idColor: var(--red); }
+#id53 { --idColor: var(--red); } /* Triller */
+#id27 { --idColor: var(--red); } /* Horror */
+#id99 { --idColor: var(--purple-dark-1); }
+#id9648 { --idColor: var(--purple-dark-1); }
+#id18 { --idColor: var(--purple-medium-1); }
+#id10749 { --idColor: var(--purple-medium-1); }
+#id10402 { --idColor: var(--darkBlue); }
+#id10770 { --idColor: var(--darkBlue); }
 #id37 { --idColor: var(--darkBlue); }
 
 
@@ -411,4 +411,17 @@ footer {
   50% { /* Cuando llegue a 50 sin opacidad */
     opacity: 0%;
   }
+}
+
+.movie-container #span-unfound-movie .m{
+  position: absolute;
+    top: 37%;
+    left: 28%;
+    transform: translate(-50%, -50%);
+    color: white;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 10px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 5px;
 }
