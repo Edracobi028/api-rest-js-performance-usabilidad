@@ -46,13 +46,18 @@ function createMovies(movies, container, lazyLoad = false ){ //peliculas y el ap
             lazyLoad ? 'data-img' :'src',
             'https://image.tmdb.org/t/p/w300' + movie.poster_path,); //agregar atributo (tipo + valor) alt
         
-        
+        //Evento para cuando fallan la imagen de pelicula
+        movieImg.addEventListener('error', ()=>{
+            movieImg.setAttribute(
+                'src',
+                'https://cdn.shopify.com/s/files/1/0529/9840/6307/t/10/assets/a-film-reel-lays-tangled-against-a-white-background-1656781059017.jpg?v=1656781060',
+            );
+        }); //agregarle el atributo src a la imagen //agregarle una imagen por defecto
 
-        
-        if(lazyLoad){ //si es true usar lazyloader
-            //llamar a lazyloader usando la funcion "observe"  cada que llama estamos llamndo
-        lazyLoader.observe(movieImg); //pasamos por param el elemento html de imagenes
-        //agregar cada imagen a el array entries
+        //escuche el evento error
+
+        if(lazyLoad){ //si en la funcion createMovies en el 3er param se pasa true indica si llevara lazy load
+            lazyLoader.observe(movieImg); //usando la funcion "observe", pasamos como param el elemento html de imagenes
         }
             
         //conectar los elementos creados al elemento del index
@@ -122,7 +127,7 @@ async function getMoviesByCategory(id) {
         }
     });
     const movies = data.results;
-    createMovies(movies, genericSection);
+    createMovies(movies, genericSection, true);
 }
 
 async function getMoviesBySearch(query) {
