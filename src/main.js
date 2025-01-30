@@ -20,15 +20,23 @@ const lazyLoader = new IntersectionObserver((entries) => {
     entries.forEach( (entry)=> { //recorrer cada elemento observado 
         //Si esta itersectada mostrarla
         if(entry.isIntersecting){
-            console.log({entry});
+            //console.log({entry});
             const url = entry.target.getAttribute('data-img'); //obtener en una variable la url
             entry.target.setAttribute('src',url); //agregarlo a atributo src
         }
     });
 });
 
-function createMovies(movies, container, lazyLoad = false ){ //peliculas y el apendchild que muestre peliculas y si requiere lazyloader
-    container.innerHTML = ''; //Limipiamos el contenedor y evitar duplicar
+//Funcion que recibe como parametros peliculas + contenedor que muestre peliculas + lazyloader en default en falso + limpiar en default en true
+function createMovies(
+    movies, 
+    container, 
+    { lazyLoad = false, clean = true} = {},
+){
+    
+    if(clean){ //Limpiar si viene como parametro
+        container.innerHTML = ''; //Limipiamos el contenedor y evitar duplicar
+    }
     
     //Iterar para cargar con cada pelicula las tarjetas del index
     movies.forEach(movie  => {
@@ -64,7 +72,7 @@ function createMovies(movies, container, lazyLoad = false ){ //peliculas y el ap
 
         //escuche el evento error
 
-        if(lazyLoad){ //si en la funcion createMovies en el 3er param se pasa true indica si llevara lazy load
+        if(lazyLoad){ //carga lazy load si viene como parametro en la funcion create Movies 
             lazyLoader.observe(movieImg); //usando la funcion "observe", pasamos como param el elemento html de imagenes
         }
             
@@ -112,7 +120,7 @@ function createCategories(categories, container){
 async function getTrendingMoviesPreview() {
     const { data } = await api('trending/movie/day'); //obtener por axios llamar api asincrono + API KEY
     const movies = data.results;
-    console.log(movies);
+    //console.log(movies);
     
     createMovies(movies,trendingMoviesPreviewList, true); //enviar array peliculas y el nombre del contenedor y lazy Load en true 
 }
@@ -153,7 +161,42 @@ async function getMoviesBySearch(query) {
 async function getTrendingMovies() {
     const { data } = await api('trending/movie/day'); //obtener por axios llamar api asincrono + API KEY
     const movies = data.results;
-    createMovies(movies,genericSection); //enviar array peliculas y el nombre del contenedor
+    createMovies(movies,genericSection, {lazyLoad: true, clean: true} ); //enviar array peliculas y el insertar en el contenedor + lazy loading y sin limpiar
+    
+    //Boton para cargar mas
+    const btnLoadMore = document.createElement('button'); //crear boton
+    btnLoadMore.innerText = 'Cargar más'; // agregar texto
+    btnLoadMore.addEventListener('click', getPaginatedTrendingMovies); //evento click y funcion para paginar
+    genericSection.appendChild(btnLoadMore);    //insertar en el boton
+
+}
+
+//variable para cambiar la pagina dinamicamente
+let page = 1;
+
+//Funcion asincrona para llamar a API
+async function getPaginatedTrendingMovies (){
+    
+    page++; //Suma +1
+    //Enviar diferentes paginas por axios por objeto params
+    const { data } = await api('trending/movie/day',{
+        params:{
+            page,
+        },
+    }); //obtener por axios llamar api asincrono + API KEY
+    const movies = data.results;
+
+    createMovies( //enviar array peliculas y el insertar en el contenedor + lazy loading y sin limpiar
+        movies,
+        genericSection, 
+        {lazyLoad: true, clean: false} 
+    ); 
+
+        //Llamar otravez el codigo del boton
+        const btnLoadMore = document.createElement('button'); //crear boton
+        btnLoadMore.innerText = 'Cargar más'; // agregar texto
+        btnLoadMore.addEventListener('click', getPaginatedTrendingMovies); //evento click y funcion
+        genericSection.appendChild(btnLoadMore);    //insertar en el boton
 }
 
 //Funcion asincrona para traer detalles por API
