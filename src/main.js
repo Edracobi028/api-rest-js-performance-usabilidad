@@ -163,40 +163,48 @@ async function getTrendingMovies() {
     const movies = data.results;
     createMovies(movies,genericSection, {lazyLoad: true, clean: true} ); //enviar array peliculas y el insertar en el contenedor + lazy loading y sin limpiar
     
-    //Boton para cargar mas
+    /* //Boton para cargar mas
     const btnLoadMore = document.createElement('button'); //crear boton
     btnLoadMore.innerText = 'Cargar más'; // agregar texto
     btnLoadMore.addEventListener('click', getPaginatedTrendingMovies); //evento click y funcion para paginar
-    genericSection.appendChild(btnLoadMore);    //insertar en el boton
+    genericSection.appendChild(btnLoadMore);    //insertar en el boton */
 
 }
 
-//variable para cambiar la pagina dinamicamente
-let page = 1;
+
+
+
+window.addEventListener('scroll', getPaginatedTrendingMovies); //Escuchar scroll y a la vez llamar la función
 
 //Funcion asincrona para llamar a API
 async function getPaginatedTrendingMovies (){
+    const { scrollTop, scrollHeight, clientHeight } = document.documentElement; //Deconstruir
+
+    const scrollIsBottom = (scrollTop + clientHeight) >= (scrollHeight -15);
+
+    if (scrollIsBottom) {
+        page++; //Suma +1
+        //Enviar diferentes paginas por axios por objeto params
+        const { data } = await api('trending/movie/day',{
+            params:{
+                page,
+            },
+        }); //obtener por axios llamar api asincrono + API KEY
+        const movies = data.results;
     
-    page++; //Suma +1
-    //Enviar diferentes paginas por axios por objeto params
-    const { data } = await api('trending/movie/day',{
-        params:{
-            page,
-        },
-    }); //obtener por axios llamar api asincrono + API KEY
-    const movies = data.results;
+        createMovies( //enviar array peliculas y el insertar en el contenedor + lazy loading y sin limpiar
+            movies,
+            genericSection, 
+            {lazyLoad: true, clean: false} 
+        ); 
+    }
 
-    createMovies( //enviar array peliculas y el insertar en el contenedor + lazy loading y sin limpiar
-        movies,
-        genericSection, 
-        {lazyLoad: true, clean: false} 
-    ); 
 
-        //Llamar otravez el codigo del boton
+        /* //Llamar otravez el codigo del boton
         const btnLoadMore = document.createElement('button'); //crear boton
         btnLoadMore.innerText = 'Cargar más'; // agregar texto
         btnLoadMore.addEventListener('click', getPaginatedTrendingMovies); //evento click y funcion
-        genericSection.appendChild(btnLoadMore);    //insertar en el boton
+        genericSection.appendChild(btnLoadMore);    //insertar en el boton */
 }
 
 //Funcion asincrona para traer detalles por API

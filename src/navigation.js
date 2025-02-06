@@ -1,3 +1,6 @@
+let page = 1; //variable para cambiar la pagina dinamicamente
+let infiniteScroll; //crear variable para guarde el nombre de la funcion 
+
 //Escuchar cuando click al boton busqueda y cambiar el hash search
 searchFormBtn.addEventListener('click', () => {
     
@@ -16,13 +19,18 @@ arrowBtn.addEventListener('click', () => {
 });
 window.addEventListener('DOMContentLoaded', navigator, false); //Escuchar evento al cargar la app + llamar la funcion + false
 window.addEventListener('hashchange', navigator   , false); //Escuchar evento hashchange + llamar la funcion + false
-
+window.addEventListener('scroll', infiniteScroll, false); //Escuchar evento scroll + llamar la funcion + false
 
 //Para leer el hash cuando cargue la app y al cambiar el hash
 function navigator() {
     console.log({location});
+
+    if (infiniteScroll){ //Limpiar Si tiene un valor
+        window.removeEventListener('scroll', infiniteScroll, { passive: false} );
+        infiniteScroll = undefined;
+    }
     
-    //leer si empieza con trends
+    //Llamar a las funciones si inician con
     if(location.hash.startsWith('#trends')){
         trendsPage();
     }else if (location.hash.startsWith('#search=')){
@@ -37,6 +45,11 @@ function navigator() {
     //location.hash;
     document.body.scrollTop = 0; //Posicione inicialmente hasta arriba
     document.documentElement.scrollTop = 0; //Posicione inicialmente hasta arriba (Safari)
+
+    //Preguntar de nuevo
+    if (infiniteScroll){ //Limpiar Si en alguna de las rutas se agrego un valor
+        window.addEventListener('scroll', infiniteScroll, { passive: false});
+    }
 
 }
 
@@ -59,6 +72,8 @@ function trendsPage() {
     headerCategoryTitle.innerHTML = 'Tendencias';  //Nombrar tendencias
 
     getTrendingMovies();
+
+    infiniteScroll = getPaginatedTrendingMovies;//Decirle a IS que sea igual nombre de la funcion que quiero se ejecute
 }
 function searchPage() {
     console.log('Search!!');
