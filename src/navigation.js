@@ -1,4 +1,5 @@
-let page = 1; //variable para cambiar la pagina dinamicamente
+let maxPage; //variable para guardar el num maximo de paginas de una consulta
+let page = 1; //variable para cambiar la pagina dinamicamente y que empiece en 1
 let infiniteScroll; //crear variable para guarde el nombre de la funcion 
 
 //Escuchar cuando click al boton busqueda y cambiar el hash search

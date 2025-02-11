@@ -182,7 +182,10 @@ async function getPaginatedTrendingMovies (){
 
     const scrollIsBottom = (scrollTop + clientHeight) >= (scrollHeight -15);
 
-    if (scrollIsBottom) {
+    //crear una variable que guarda el resultado de una valifdación ya llegamos
+    const pageIsNotMax = page < maxPage;
+
+    if (scrollIsBottom && pageIsNotMax) {
         page++; //Suma +1
         //Enviar diferentes paginas por axios por objeto params
         const { data } = await api('trending/movie/day',{
@@ -191,7 +194,8 @@ async function getPaginatedTrendingMovies (){
             },
         }); //obtener por axios llamar api asincrono + API KEY
         const movies = data.results;
-    
+        //console.log(data);
+        
         createMovies( //enviar array peliculas y el insertar en el contenedor + lazy loading y sin limpiar
             movies,
             genericSection, 
