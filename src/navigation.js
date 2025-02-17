@@ -74,7 +74,7 @@ function trendsPage() {
 
     getTrendingMovies();
 
-    infiniteScroll = getPaginatedTrendingMovies;//Decirle a IS que sea igual nombre de la funcion que quiero se ejecute
+    infiniteScroll = getPaginatedTrendingMovies;//Decirle a Infinite Scroll que sea igual nombre de la funcion que quiero se ejecute
 }
 function searchPage() {
     console.log('Search!!');
@@ -95,6 +95,10 @@ function searchPage() {
     // ['#search', 'buscardor']
     const [_,query] = location.hash.split('='); //Nombramos sus dos partes y Separamos en dos la url
     getMoviesBySearch(query); //envia lo que el usuario busca
+
+    //Decirle a IS que sea igual nombre de la funcion que quiero se ejecute y ejecute la que trae dentro
+    infiniteScroll = getPaginatedMoviesBySearch(query);
+
 }
 function movieDetailsPage() {
     console.log('Movie!!');
@@ -139,7 +143,9 @@ function categoriesPage() {
 
     headerCategoryTitle.innerHTML = categoryName;  //insertar el nombre de la categoria usando el extraido
     getMoviesByCategory(categoryId); //Llamar a la funcion que trae las categorias
-       
+
+    //Decirle a IS que sea igual nombre de la funcion que quiero se ejecute y ejecute la que trae dentro
+    infiniteScroll = getPaginatedMoviesByCategory(categoryId);
 }
 function homePage() {
     //Cuando entremos a home

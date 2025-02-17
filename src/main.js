@@ -143,7 +143,40 @@ async function getMoviesByCategory(id) {
         }
     });
     const movies = data.results;
-    createMovies(movies, genericSection, true);
+    maxPage = data.total_pages; //Agregar pagina maxima (Crearlo donde se necesite infinite scroll)
+
+    createMovies(movies, genericSection, {lazyLoad: true} );
+}
+
+function getPaginatedMoviesByCategory (id){
+    //Creamos un closure que devuelve una funcion anonima
+    return async function () {
+        const { scrollTop, scrollHeight, clientHeight } = document.documentElement; //Validar el scroll
+
+        const scrollIsBottom = (scrollTop + clientHeight) >= (scrollHeight -15);
+    
+        //crear una variable que guarda el resultado de una valifdación ya llegamos
+        const pageIsNotMax = page < maxPage;
+    
+        if (scrollIsBottom && pageIsNotMax) {
+            page++; //Suma uno mas
+            //Enviar diferentes paginas por axios por objeto params
+            const { data } = await api('discover/movie',{
+                params:{
+                    with_genres: id,
+                    page,
+                }
+            });
+            const movies = data.results;
+            
+            createMovies( //enviar array peliculas y el insertar en el contenedor + lazy loading y sin limpiar
+                movies,
+                genericSection, 
+                {lazyLoad: true, clean: false} 
+            ); 
+        }
+    }
+
 }
 
 async function getMoviesBySearch(query) {
@@ -154,7 +187,43 @@ async function getMoviesBySearch(query) {
         }
     });
     const movies = data.results;
+    maxPage = data.total_pages; //asignar la paginacion maxima 
+    console.log(maxPage);
+    // Video 13 de 20 9:39
     createMovies(movies, genericSection);
+}
+
+//se le quita la propiedad asincrona
+//funcion solo para crear un closure para recibir el query y se pueda usar al ejecutar la funcion que lleva dentro
+function getPaginatedMoviesBySearch (query){
+    //Creamos un closure que devuelve una funcion anonima
+    return async function () {
+        const { scrollTop, scrollHeight, clientHeight } = document.documentElement; //Deconstruir
+
+        const scrollIsBottom = (scrollTop + clientHeight) >= (scrollHeight -15);
+    
+        //crear una variable que guarda el resultado de una valifdación ya llegamos
+        const pageIsNotMax = page < maxPage;
+    
+        if (scrollIsBottom && pageIsNotMax) {
+            page++; //Suma uno mas
+            //Enviar diferentes paginas por axios por objeto params
+            const { data } = await api('search/movie',{
+                params:{
+                    query,
+                    page,
+                }
+            });
+            const movies = data.results;
+            
+            createMovies( //enviar array peliculas y el insertar en el contenedor + lazy loading y sin limpiar
+                movies,
+                genericSection, 
+                {lazyLoad: true, clean: false} 
+            ); 
+        }
+    }
+
 }
 
 //Crear una funcion asincrona para obtener las peliculas en tendencia
@@ -202,13 +271,6 @@ async function getPaginatedTrendingMovies (){
             {lazyLoad: true, clean: false} 
         ); 
     }
-
-
-        /* //Llamar otravez el codigo del boton
-        const btnLoadMore = document.createElement('button'); //crear boton
-        btnLoadMore.innerText = 'Cargar más'; // agregar texto
-        btnLoadMore.addEventListener('click', getPaginatedTrendingMovies); //evento click y funcion
-        genericSection.appendChild(btnLoadMore);    //insertar en el boton */
 }
 
 //Funcion asincrona para traer detalles por API
