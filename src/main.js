@@ -44,9 +44,7 @@ function createMovies(
         const movieContainer = document.createElement('div'); //crear un div y 
         movieContainer.classList.add('movie-container');  // agregar la clase del css movie-container'
         
-        movieContainer.addEventListener('click', ()=>{ //Agregar la funcion de click para que nos lleve a detalles
-            location.hash = '#movie=' + movie.id; //agregar al hashel id de la pelicula
-        }); 
+         
         const movieImg = document.createElement('img'); //crear un img 
         movieImg.classList.add('movie-img');  // agregar la clase del css 
         movieImg.setAttribute('alt',movie.title); //agregar atributo (tipo + valor) alt
@@ -54,6 +52,9 @@ function createMovies(
             lazyLoad ? 'data-img' :'src',
             'https://image.tmdb.org/t/p/w300' + movie.poster_path,); //agregar atributo (tipo + valor) alt
         
+        movieImg.addEventListener('click', ()=>{ //Agregar la funcion de click para que nos lleve a detalles
+            location.hash = '#movie=' + movie.id; //agregar al hashel id de la pelicula
+        }); 
         //Evento para cuando fallan la imagen de pelicula
         movieImg.addEventListener('error', ()=>{
             movieImg.setAttribute(
@@ -71,6 +72,13 @@ function createMovies(
         }); //agregarle el atributo src a la imagen //agregarle una imagen por defecto
 
         //escuche el evento error
+        
+        const movieBtn = document.createElement('button'); //crear nuevo boton
+        movieBtn.classList.add('movie-btn'); //Agregarle clase
+        movieBtn.addEventListener('click', ()=>{ 
+            movieBtn.classList.toggle('movie-btn--liked'); //Agregarle clase
+            //DEBERIAMOS AGREGAR LA PELICULA A LOCAL STORAGE
+        }); //Escuchar el clic y ejecutar funcion AF
 
         if(lazyLoad){ //carga lazy load si viene como parametro en la funcion create Movies 
             lazyLoader.observe(movieImg); //usando la funcion "observe", pasamos como param el elemento html de imagenes
@@ -78,6 +86,7 @@ function createMovies(
             
         //conectar los elementos creados al elemento del index
         movieContainer.appendChild(movieImg); // meter la img al div
+        movieContainer.appendChild(movieBtn); // meter rl boton al div
         container.appendChild(movieContainer); // meter el container a la seccion
 
     });
