@@ -1,3 +1,4 @@
+//Data
 
 //console.log("API URL = http://dfgdfgfd.com/retrert?api_key=" + API_KEY);
 //Crear una instancia de axios con la config como la base de url y apikey
@@ -10,6 +11,36 @@ const api = axios.create({
         'api_key': API_KEY,
     },
 });
+
+//Devolver lo que se encuentre el localstorage
+function likedMoviesList() {
+    const item = JSON.parse( localStorage.getItem('liked_movies') ) ; // crear y guardar en variable y conventir a objeto lo que recibimos en LS 
+    let movies; //crear variable sin valor
+
+    if(item){
+        movies = item; //guardamos en movies lo que hay en Local Storage
+    } else {
+        movies = {}; //ponemos vacio
+    }
+
+    return movies;
+}
+
+ function likeMovie(movie){
+
+    //Array
+    const likedMovies = likedMoviesList(); //Guardar el obj que trae la consulta
+
+
+    if (likedMovies[movie.id]){ //Hay algo guardado? //Removerla de localstorage
+        likedMovies[movie.id] = undefined; //anular del objeto
+    } else { //Agregar la pelicula
+        likedMovies[movie.id] = movie; //guardar la data de plicula que recibimos como parametro
+    } 
+
+    localStorage.setItem('liked_movies' ,JSON.stringify(likedMovies)); //Editar la propiedad de local storage con el objeto stringifiado
+}; 
+
 
 // === Utils ===
 
@@ -77,7 +108,8 @@ function createMovies(
         movieBtn.classList.add('movie-btn'); //Agregarle clase
         movieBtn.addEventListener('click', ()=>{ 
             movieBtn.classList.toggle('movie-btn--liked'); //Agregarle clase
-            //DEBERIAMOS AGREGAR LA PELICULA A LOCAL STORAGE
+            
+            likeMovie(movie);
         }); //Escuchar el clic y ejecutar funcion AF
 
         if(lazyLoad){ //carga lazy load si viene como parametro en la funcion create Movies 
@@ -198,7 +230,7 @@ async function getMoviesBySearch(query) {
     const movies = data.results;
     maxPage = data.total_pages; //asignar la paginacion maxima 
     console.log(maxPage);
-    // Video 13 de 20 9:39
+    
     createMovies(movies, genericSection);
 }
 
